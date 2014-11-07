@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<html>
+  <!-- [START head_html] -->
+  <head>
+    <link href='http://fonts.googleapis.com/css?family=Signika|Bree+Serif' rel='stylesheet' type='text/css'>
+    <link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" />
+    <link type="text/css" rel="stylesheet" href="/css/style.css" />
+    
+    <script src="/js/jquery.min.js"></script>
+    <script language="Javascript">
+    
+    function switch_image(action_string, image_id)
+    {
+      
+        var url = "/playimage?play_action="+action_string+"&image_id="+image_id;
+       
+        $( "#play_image" ).attr("src",url);
+      
+    }
+    </script>
+
+  </head>
+  <!-- [END head_html] -->
+  <body style="background-color:#ddd;">
+    
+    <div class="container">
+
+     <div class="row">
+        <div class="col-sm-9">
+            <a href="http://achint-sfsu.appspot.com">
+              <img src="images/Google_App_Engine_Logo.png" height="80" align="left" style="margin-right:20px;">
+            </a>
+            <h1 class="branding">GAE Blobstore Demo App</h1>
+            <p class="branding">Academic Project For Evaluating the GAE Platform & BlobStore API</p>
+        </div>
+        <div class="col-sm-3" style="padding-top:30px; text-align:right;">
+
+          {% if url_linktext=="Login" %}
+              <a href="{{ url }}" class="btn btn-success btn-lg"><i class="fa fa-sign-in"></i> Login to Upload</a>
+          {% else %}
+              <a href="{{ url }}" class="btn btn-danger btn-lg"><i class="fa fa-sign-out"></i> Logout</a>
+          {% endif %} 
+        </div> 
+      </div>
+
+      <hr/>
+
+      <div class="row">
+        
+        
+
+        <div class="col-sm-9" style="background-color:#fff;padding:20px;border-radius:10px;box-shadow:3px 3px 10px #999;">
+        
+            {% for current_file in uploaded_files %}
+              
+              <div>
+                
+                  
+                  <h2>{{ current_file['title'] }}</h2>
+                  <span>File Uploaded on: {{ current_file['timestamp'] }}</span> <br/>
+                  
+                  <div id="imgbox">
+                    <img src="http://achint-sfsu.appspot.com/imagelarge?blob_key={{current_file['blob_id']}}" id="play_image">
+                  </div>
+
+                  <br/> 
+                 
+              </div>
+
+            {% endfor %} 
+
+         </div>
+
+         <div class="col-sm-3">
+
+          <a href="http://achint-sfsu.appspot.com/getrawfile?blob_key={{blob_id}}" class="btn btn-lg btn-primary btn-block">Download File</a>
+
+          <button class="btn btn-lg btn-default btn-block" onClick="switch_image('flipH','{{image_id}}');">Flip Horizontal</button> 
+
+          <button class="btn btn-lg btn-default btn-block" onClick="switch_image('flipV','{{image_id}}');">Flip Vertical</button>
+
+          <button class="btn btn-lg btn-default btn-block" onClick="switch_image('rotateL','{{image_id}}');">Rotate Left</button> 
+
+          <button class="btn btn-lg btn-default btn-block" onClick="switch_image('rotateR','{{image_id}}');">Rotate Right</button>
+         
+          <a href="http://achint-sfsu.appspot.com/delete?blob_key={{blob_id}}" class="btn btn-lg btn-danger btn-block">Delete File</a>
+
+         </div>
+
+
+
+       
+
+      </div>
+
+      <center>
+        <hr/>
+        <B>Submitted By:</B> Achint Verma (SFSU# 913024754) <br/>
+        This application is part of assignment for CSC 890 (Cloud Computing), Computer Science <br/> <br/>
+
+        &copy; 2014, San Francisco State Univerity. 
+      </center> 
+
+    </div>
+
+    
+
+  </body>
+</html>
+{% endautoescape %}

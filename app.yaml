@@ -1,0 +1,35 @@
+application: achint-sfsu
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: true
+
+handlers:
+- url: /stylesheets
+  static_dir: stylesheets
+
+- url: /css
+  static_dir: css
+
+- url: /js
+  static_dir: js
+
+- url: /fonts
+  static_dir: fonts
+
+- url: /images
+  static_dir: images
+
+- url: /swf
+  static_dir: swf
+
+- url: /.*
+  script: guestbook.application
+
+libraries:
+- name: webapp2
+  version: latest
+- name: jinja2
+  version: latest
+- name: MySQLdb
+  version: "latest"

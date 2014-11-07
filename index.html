@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+  <!-- [START head_html] -->
+  <head>
+    <link href='http://fonts.googleapis.com/css?family=Signika|Bree+Serif' rel='stylesheet' type='text/css'>
+    <link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" />
+    <link type="text/css" rel="stylesheet" href="/css/style.css" />
+    <link type="text/css" rel="stylesheet" href="/css/font-awesome.min.css" />
+   
+    <script src="/js/jquery.min.js"></script>
+
+    <script type="text/javascript">
+    
+    function open_player(url)
+    {
+
+      window.open(url, "_blank", "toolbar=no, location=no, menubar=no, titlebar=no, scrollbars=no, resizable=yes, top=100, left=200, width=400, height=300");
+
+    }
+
+    </script>
+    
+  </head>
+  
+  <body>
+    
+    <div class="container">
+
+       <div class="row">
+        <div class="col-sm-9">
+            <a href="http://achint-sfsu.appspot.com">
+              <img src="images/Google_App_Engine_Logo.png" height="80" align="left" style="margin-right:20px;">
+            </a>
+            <h1 class="branding">GAE Blobstore Demo App</h1>
+            <p class="branding">Academic Project For Evaluating the GAE Platform & BlobStore API</p>
+        </div>
+        <div class="col-sm-3" style="padding-top:30px; text-align:right;">
+
+          {% if url_linktext=="Login" %}
+              <a href="{{ url }}" class="btn btn-success btn-lg"><i class="fa fa-sign-in"></i> Login to Upload</a>
+          {% else %}
+              <a href="{{ url }}" class="btn btn-danger btn-lg"><i class="fa fa-sign-out"></i> Logout</a>
+          {% endif %} 
+        </div> 
+      </div>
+      
+      <hr/>
+      
+      <div class="row">
+        
+        <div class="col-sm-2"> 
+          
+          <ul class="nav nav-pills nav-stacked" role="tablist">
+            <li role="presentation"><a href="http://achint-sfsu.appspot.com">All Files</a></li>
+            <li role="presentation" {% if category=="0" %} class="active" {% endif %}><a href="http://achint-sfsu.appspot.com/?category=0">Images</a></li>
+            <li role="presentation" {% if category=="1" %} class="active" {% endif %}><a href="http://achint-sfsu.appspot.com/?category=1">Audios</a></li>
+            <li role="presentation" {% if category=="2" %} class="active" {% endif %}><a href="http://achint-sfsu.appspot.com/?category=2">Videos</a></li>
+          </ul>
+        
+        </div>
+
+        {% if url_linktext=="Logout" %}
+        <div class="col-sm-7">
+        {% else %}
+        <div class="col-sm-10">
+        {% endif %}  
+          
+
+            {% for current_file in uploaded_files %}
+             
+              <div class="photocontainer">
+                <center>
+                  <div style="min-height:150px;text-align:center;width:240px;">
+
+                    {% if current_file['filetype']==0 %}
+                      
+                      <img src="http://achint-sfsu.appspot.com/thumb?blob_key={{current_file['blob_id']}}">
+                    
+                    {% else %}
+
+                      {% if current_file['filetype']==1 %}
+                          
+                            <i class="fa fa-music media-icon" style="font-size: 100px; color: #999; margin-top: 40px;" onClick="open_player('http://achint-sfsu.appspot.com/getrawfile?blob_key={{current_file['blob_id']}}');"></i>
+                          
+                      {% else %}
+                          <i class="fa fa-video-camera media-icon" style="font-size: 100px; color: #999; margin-top: 40px;" onClick="open_player('http://achint-sfsu.appspot.com/getrawfile?blob_key={{current_file['blob_id']}}');"></i>
+                      {% endif %}
+
+                    
+                    {% endif %}  
+
+                  </div>
+                  <br/>
+                  <b>{{ current_file['title'] }}</b> <br/>
+                  <span>File Uploaded on: {{ current_file['timestamp'] }}</span> <br/>
+
+                  {% if url_linktext=="Logout" %}
+                    {% if current_file['filetype']==0 %}
+                    <a href="http://achint-sfsu.appspot.com/imagedetailpage?image_id={{current_file['fid']}}" class="btn btn-xs btn-success">Crop / Resize / Rotate</a>
+                    {% endif %}  
+                  <a href="http://achint-sfsu.appspot.com/delete?blob_key={{current_file['blob_id']}}" class="btn btn-xs btn-danger">Delete File</a>
+                  {% endif %}  
+                </center>
+              </div>
+             
+            {% endfor %}        
+          
+
+
+        </div>
+        
+        {% if url_linktext=="Logout" %}
+        <div class="col-sm-3">
+          
+          
+          <div class="uploadcontainer">
+          <form role="form" action="{{ upload_url }}" method="post" enctype="multipart/form-data">
+            
+            <h3>Upload Files</h3>
+
+            <div class="form-group">
+              <label for="exampleInputFile">Select Image / Audio / Video File</label>
+              <input name="file" type="file" id="exampleInputFile">
+              <p class="help-block">Supported image formats are JPG, PNG and GIF</p>
+            </div>
+
+            <div class="form-group">
+              <label for="keyField">Title</label>
+              <input type="text" name="title" class="form-control" id="keyField" placeholder="Enter Short Title">
+            </div>
+
+            <div class="form-group">
+              <label for="selctTypeField">Type of file</label>
+
+              <select name="filetype" onChange="switchMessageType(this.value);" class="form-control">
+                <option value="">Select File Type</option>
+                <option value="0">Image</option>
+                <option value="1">Audio</option>
+                <option value="2">Video</option>
+              </select>
+
+            </div>
+
+            <button type="submit" class="btn btn-success btn-lg btn-block">Upload File</button>
+
+          </form>
+          </div>
+          
+        </div>
+        {% endif %}
+
+      </div>
+
+      <center>
+        <hr/>
+        <B>Submitted By:</B> Achint Verma (SFSU# 913024754) <br/>
+        This application is part of assignment for CSC 890 (Cloud Computing), Computer Science <br/> <br/>
+
+        &copy; 2014, San Francisco State Univerity. 
+      </center> 
+
+    </div>
+
+  </body>
+</html>
